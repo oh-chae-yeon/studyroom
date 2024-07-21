@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_studyroom/confirm_reservation.dart';
+import 'package:project_studyroom/detailreservation.dart';
 //import 'package:project_studyroom/reservation.dart';
 
 void main() {
@@ -17,10 +17,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Confirmreservation(),
+      home: Detailreservation(),
     );
   }
 }
 //위젯의 UI를 정의하는 메서드 MaterialApp을 반환하여 어플의 기본설정을 제공
-
 
