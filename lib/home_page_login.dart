@@ -8,15 +8,16 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 255, 0, 0),
-        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 255, 0, 0), //배경 red
+        centerTitle: true, //가운데 정렬
         title: Text(
+          //제목
           "KNU & coop_studyroom reservation",
           style: TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0), //여백주기
         child: Column(
           children: [
             TextField(
