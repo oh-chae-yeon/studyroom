@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project_studyroom/studyroomstructure.dart';
 //import 'package:intl/intl.dart';
 
 //동적인 상태를 관리하는 위젯을 의미
@@ -27,12 +29,25 @@ class _ReservationScreenState extends State<ReservationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 255, 0, 0), //배경 red
+        backgroundColor: const Color.fromARGB(255, 255, 0, 0), //배경 red
         centerTitle: true,
         title: const Text(
           '예약',
           style: TextStyle(fontSize: 18, color: Colors.white),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const Studyroomstructure(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.add, color: Colors.white),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

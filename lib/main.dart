@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_studyroom/detailreservation.dart';
+//import 'package:project_studyroom/detailreservation.dart';
+import 'package:project_studyroom/reservation.dart';
 //import 'package:project_studyroom/reservation.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Detailreservation(),
+      home: ReservationScreen(),
     );
   }
 }
