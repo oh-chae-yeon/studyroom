@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project_studyroom/reservation.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key}); //생성자
@@ -46,7 +47,14 @@ class HomePage extends StatelessWidget {
                   child: Text('회원가입'),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ReservationScreen(),
+                      ),
+                    );
+                  },
                   child: Text('비밀번호 찾기'),
                 ),
               ],
