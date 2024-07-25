@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:project_studyroom/studyroomstructure.dart';
 //import 'package:intl/intl.dart';
@@ -33,7 +33,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
         centerTitle: true,
         title: const Text(
           '예약',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: TextStyle(
+              fontSize: 23, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         actions: [
           IconButton(
@@ -116,40 +117,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: Column(
-        children: [
-          BottomNavigationBar(
-            fixedColor: Colors.black,
-            unselectedItemColor: Colors.black,
-            showUnselectedLabels: true,
-            selectedFontSize: 12,
-            unselectedFontSize: 12,
-            iconSize: 28,
-            type: BottomNavigationBarType.fixed,
-            items: 
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_filled),
-                label: '예약',
-                backgroundColor: Colors.white,
-              ),
-               BottomNavigationBar(
-            fixedColor: Colors.black,
-            unselectedItemColor: Colors.black,
-            showUnselectedLabels: true,
-            selectedFontSize: 12,
-            unselectedFontSize: 12,
-            iconSize: 28,
-            type: BottomNavigationBarType.fixed,
-            items: 
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_filled),
-                label: '예약',
-                backgroundColor: Colors.white,
-              ),
-      
-          ),
-        ],
       ),
     );
   }

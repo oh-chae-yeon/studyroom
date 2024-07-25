@@ -10,7 +10,7 @@ class Detailreservation extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 255, 0, 0), //배경 red
         centerTitle: true,
         title: const Text(
-          '상세 예약',
+          '나의 예약',
           style: TextStyle(
               fontSize: 23, fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -50,22 +50,64 @@ class Detailreservation extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 8),
-            const Text(
-              '입실 : 여동호(미확인)\n      안영주(미확인)',
-              style: TextStyle(fontSize: 16),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text('여동호(미확인)'),
+                Text('안영주(미확인)'),
+              ],
             ),
             const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // 예약 취소 버튼 클릭 시 동작 추가
-                },
-                child: const Text('예약취소'),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('입실확인'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _showCancelDialog(context);
+                  },
+                  child: const Text('예약취소'),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
+}
+
+void _showCancelDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('예약 취소'),
+        content: const Text('정말로 예약을 취소하시겠습니까?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // 다이얼로그 닫기
+            },
+            child: const Text('아니오'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // 다이얼로그 닫기
+              // 예약 취소 로직 추가
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('예약이 취소되었습니다.'),
+                ),
+              );
+            },
+            child: const Text('예'),
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -1,19 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project_studyroom/Homepage.dart';
 import 'package:project_studyroom/reservation.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key}); //생성자
+class Loginpage extends StatelessWidget {
+  const Loginpage({super.key}); //생성자
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 255, 0, 0), //배경 red
+        backgroundColor: const Color.fromARGB(255, 255, 0, 0), //배경 red
         centerTitle: true, //가운데 정렬
-        title: Text(
+        title: const Text(
           //제목
-          "KNU & coop_studyroom reservation",
+          "경북대 복지관 스터디룸 예약",
           style: TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
@@ -21,12 +21,12 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0), //여백주기
         child: Column(
           children: [
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 labelText: "학번",
               ),
             ),
-            TextField(
+            const TextField(
               obscureText: true,
               decoration: InputDecoration(
                 labelText: "생년월일",
@@ -34,17 +34,24 @@ class HomePage extends StatelessWidget {
             ),
             Container(
               width: double.infinity,
-              margin: EdgeInsets.only(top: 24),
+              margin: const EdgeInsets.only(top: 24),
               child: ElevatedButton(
-                onPressed: () {},
-                child: Text('로그인'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const HomePage(),
+                    ),
+                  );
+                },
+                child: const Text('로그인'),
               ),
             ),
             Row(
               children: [
                 TextButton(
                   onPressed: () {},
-                  child: Text('회원가입'),
+                  child: const Text('회원가입'),
                 ),
                 TextButton(
                   onPressed: () {
@@ -55,7 +62,7 @@ class HomePage extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Text('비밀번호 찾기'),
+                  child: const Text('비밀번호 찾기'),
                 ),
               ],
             ),
