@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:project_studyroom/Loginpage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:project_studyroom/firebase_options.dart';
+import 'package:project_studyroom/providers/login_provider.dart';
+import 'package:provider/provider.dart';
+import '../providers/login_provider.dart';
+import '../providers/reserv_provider.dart';
 
-void main() {
-  //애플리케이션 실행
-  runApp(const MyApp()); //runapp호출
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+        // ReservationProvider 추가
+        ChangeNotifierProvider(create: (_) => ReservationProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 //statelesswidget을 상속받아, 불변의 위젯 정의

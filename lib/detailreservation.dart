@@ -7,7 +7,9 @@ class Detailreservation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 0, 0), //배경 red
+        automaticallyImplyLeading: false,
+        leading: Container(),
+        backgroundColor: const Color.fromARGB(255, 154, 249, 159), //배경 red
         centerTitle: true,
         title: const Text(
           '나의 예약',
