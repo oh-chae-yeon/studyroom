@@ -30,13 +30,17 @@ class ReservationProvider with ChangeNotifier {
           'Study Room 4': List<bool>.filled(9, true),
           'Study Room 5': List<bool>.filled(9, true),
         };
-        await _firestore.collection('reservations').doc(formattedDate).set(reservationData);
+        await _firestore
+            .collection('reservations')
+            .doc(formattedDate)
+            .set(reservationData);
       }
     }
   }
 
   Future<void> _deleteOldReservations(DateTime today) async {
-    QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore.collection('reservations').get();
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await _firestore.collection('reservations').get();
 
     for (var doc in snapshot.docs) {
       DateTime docDate = DateFormat('yyyy-MM-dd').parse(doc.id);
@@ -76,7 +80,10 @@ class ReservationProvider with ChangeNotifier {
           'Study Room 4': List<bool>.filled(9, true),
           'Study Room 5': List<bool>.filled(9, true),
         };
-        await _firestore.collection('reservations').doc(date).set(reservationData);
+        await _firestore
+            .collection('reservations')
+            .doc(date)
+            .set(reservationData);
       }
       return reservationData;
     } catch (e) {
@@ -93,39 +100,48 @@ class ReservationProvider with ChangeNotifier {
   }
 
   Future<void> handleReservation(
-      String date, String room, int startTime, int duration, User user) async {
-    _isProcessing = true;
-    notifyListeners();
+  String date, 
+  String room, 
+  int startTime, 
+  int duration, 
+  User user) async {
+  _isProcessing = true;
+  notifyListeners();
 
-    bool hasAlreadyReserved = await checkUserReservation(date, user);
-    if (hasAlreadyReserved) {
-      _isProcessing = false;
-      notifyListeners();
-      throw Exception('당일 예약은 한 번만 가능합니다.');
-    }
-
-    Map<String, List<bool>> reservationData = await fetchReservationData(date);
-
-    for (int i = 0; i < duration; i++) {
-      if (reservationData[room]![startTime - 9 + i] == false) {
-        _isProcessing = false;
-        notifyListeners();
-        throw Exception('이미 예약된 시간입니다.');
-      }
-    }
-
-    for (int i = 0; i < duration; i++) {
-      reservationData[room]![startTime - 9 + i] = false;
-    }
-    await _firestore.collection('reservations').doc(date).update({
-      room: reservationData[room]!,
-    });
-
-    await saveReservation(date, room, startTime, duration, user);
-
+  bool hasAlreadyReserved = await checkUserReservation(date, user);
+  if (hasAlreadyReserved) {
     _isProcessing = false;
     notifyListeners();
+    throw Exception('당일 예약은 한 번만 가능합니다.');
   }
+
+  Map<String, List<bool>> reservationData = await fetchReservationData(date);
+
+  // Check if all the selected time slots are available
+  for (int i = 0; i < duration; i++) {
+    if (reservationData[room]![startTime - 9 + i] == false) {
+      _isProcessing = false;
+      notifyListeners();
+      throw Exception('이미 예약된 시간입니다.');
+    }
+  }
+
+  // Mark the selected time slots as reserved
+  for (int i = 0; i < duration; i++) {
+    reservationData[room]![startTime - 9 + i] = false;
+  }
+
+  // Update the reservation data in Firestore
+  await _firestore.collection('reservations').doc(date).update({
+    room: reservationData[room]!,
+  });
+
+  await saveReservation(date, room, startTime, duration, user);
+
+  _isProcessing = false;
+  notifyListeners();
+}
+
 
   Future<bool> checkUserReservation(String date, User user) async {
     QuerySnapshot snapshot = await _firestore
@@ -172,10 +188,25 @@ class ReservationProvider with ChangeNotifier {
     return snapshot.docs.length;
   }
 
-  Future<void> cancelReservation(
-      String reservationId, String date, String room, int timeIndex) async {
+  Future<void> cancelReservation(String reservationId, String date, String room, int timeIndex) async {
     await _firestore.collection('user_reservations').doc(reservationId).delete();
-    await updateReservation(date, room, timeIndex, true); // 예약 취소 시 해당 시간대 다시 사용 가능하도록 업데이트
+
+    // Fetch current reservation data for the specified date
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await _firestore.collection('reservations').doc(date).get();
+
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data()!;
+      List<bool> roomReservations = List<bool>.from(data[room]);
+
+      // Set the specified time index to true
+      roomReservations[timeIndex] = true;
+
+      // Update the Firestore document with the modified reservations
+      await _firestore.collection('reservations').doc(date).update({
+        room: roomReservations,
+      });
+    }
+
     notifyListeners();
   }
 }

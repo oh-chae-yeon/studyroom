@@ -70,12 +70,7 @@ class Detailreservation extends StatelessWidget {
                                 ElevatedButton(
                                   onPressed: () {
                                     _showCancelDialog(
-                                      context,
-                                      reservation['id'],
-                                      reservation['date'],
-                                      reservation['room'],
-                                      reservation['startTime'] - 9,
-                                    );
+                                        context, reservation['id'], reservation['date'], reservation['room'], reservation['startTime'] - 9);
                                   },
                                   child: const Text('예약취소'),
                                 ),
@@ -113,13 +108,8 @@ class Detailreservation extends StatelessWidget {
                 // 예약 취소 로직 추가
                 await Provider.of<ReservationProvider>(context, listen: false)
                     .cancelReservation(reservationId, date, room, timeIndex);
-                
-                // ScaffoldMessenger 호출
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('예약이 취소되었습니다.'),
-                  ),
-                );
+                // 다음 프레임에서 ScaffoldMessenger 호출
+               
               },
               child: const Text('예'),
             ),

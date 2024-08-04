@@ -17,9 +17,7 @@ class Profile extends StatelessWidget {
         backgroundColor: Color(0xFF22CC88), // AppBar 색상 설정
         centerTitle: true,
         title: const Text(
-          '내 정보',
-          style: TextStyle(
-              fontSize: 23, fontWeight: FontWeight.bold, color: Colors.white),
+          '내 정보'
         ),
       ),
       body: const Center(
