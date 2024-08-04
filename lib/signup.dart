@@ -101,12 +101,12 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 0, 0), //배경 red
+        backgroundColor: Color(0xFF22CC88), //배경 red
         centerTitle: true, //가운데 정렬
         title: const Text(
           //제목
           "회원가입",
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: TextStyle(fontSize: 16, color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(

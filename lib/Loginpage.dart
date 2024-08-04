@@ -61,7 +61,7 @@ class _LoginpageState extends State<Loginpage> {
           //제목
           "경북대 복지관 스터디룸 예약",
           style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 16,  color: Colors.white),
         ),
       ),
       body: Padding(
