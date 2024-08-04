@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:project_studyroom/providers/login_provider.dart';
 import 'package:project_studyroom/providers/reserv_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:project_studyroom/studyroomstructure.dart';
 
 class ReservationScreen extends StatefulWidget {
   @override
@@ -142,21 +141,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
         title: Text('시설물예약'),
         centerTitle: true,
         backgroundColor: Color(0xFF22CC88),
-         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const Studyroomstructure(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.add, color: Colors.white),
-          ),
-        ],
-
-      ),
+     ),
       body: Column(
         children: [
           SizedBox(height: 20),
@@ -206,14 +191,14 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                 capacity: '3명 ~ 8명',
                                 availability: availability,
                                 selectedDay: selectedDay!,
-                                onSelect: (int startTime, int duration) async {
+                                onSelect: (int timeIndex) async {
                                   try {
                                     await Provider.of<ReservationProvider>(context, listen: false)
                                         .handleReservation(
                                       DateFormat('yyyy-MM-dd').format(selectedDay!),
                                       roomName,
-                                      startTime,
-                                      duration,
+                                      timeIndex,
+                                      1, // 기본 학습 시간 1시간으로 설정
                                       Provider.of<LoginProvider>(context, listen: false).user!,
                                     );
 
@@ -318,13 +303,12 @@ class _ReservationScreenState extends State<ReservationScreen> {
   }
 }
 
-
-class StudyRoomItem extends StatefulWidget {
+class StudyRoomItem extends StatelessWidget {
   final String roomName;
   final String capacity;
   final List<bool> availability;
   final DateTime selectedDay;
-  final Function(int, int) onSelect;
+  final Function(int) onSelect;
   final Function(int) onCancel;
 
   StudyRoomItem({
@@ -335,90 +319,6 @@ class StudyRoomItem extends StatefulWidget {
     required this.onSelect,
     required this.onCancel,
   });
-
-  @override
-  _StudyRoomItemState createState() => _StudyRoomItemState();
-}
-
-class _StudyRoomItemState extends State<StudyRoomItem> {
-  void _showTimeSelectionDialog(BuildContext context, Function(int, int) onTimeSelected) async {
-    int _selectedStartTime = 9; // 시작 시간
-    int _selectedDuration = 1; // 학습 시간
-
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('시간 선택'),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Text('시작시간:'),
-                      SizedBox(width: 10),
-                      DropdownButton<int>(
-                        value: _selectedStartTime,
-                        items: List.generate(10, (index) {
-                          return DropdownMenuItem<int>(
-                            value: index + 9,
-                            child: Text('${index + 9}시'), // 9시부터 18시까지의 시간 옵션
-                          );
-                        }).toList(),
-                        onChanged: (int? newValue) {
-                          setState(() {
-                            _selectedStartTime = newValue!;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('학습시간:'),
-                      SizedBox(width: 10),
-                      DropdownButton<int>(
-                        value: _selectedDuration,
-                        items: List.generate(3, (index) {
-                          return DropdownMenuItem<int>(
-                            value: index + 1,
-                            child: Text('${index + 1}시간'), // 1시간, 2시간, 3시간 옵션
-                          );
-                        }).toList(),
-                        onChanged: (int? newValue) {
-                          setState(() {
-                            _selectedDuration = newValue!;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // 취소 버튼 클릭 시 다이얼로그 닫기
-              },
-              child: Text('취소'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                onTimeSelected(_selectedStartTime, _selectedDuration);
-                Navigator.of(context).pop();
-              },
-              child: Text('확인'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -433,29 +333,27 @@ class _StudyRoomItemState extends State<StudyRoomItem> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.roomName,
+              roomName,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 5),
-            Text('수용인원: ${widget.capacity}'),
+            Text('수용인원: $capacity'),
             SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(9, (index) {
-                bool isPastTime = now.isSameDay(widget.selectedDay) && (index + 9) <= currentHour;
+                bool isPastTime = now.isSameDay(selectedDay) && (index + 9) <= currentHour;
                 return Column(
                   children: [
                     GestureDetector(
                       onTap: () {
-                        if (!isPastTime && widget.availability[index]) {
-                          _showTimeSelectionDialog(context, (int startTime, int duration) {
-                            widget.onSelect(startTime, duration);
-                          });
+                        if (!isPastTime && availability[index]) {
+                          onSelect(index + 9);
                         }
                       },
                       onLongPress: () {
-                        if (!isPastTime && !widget.availability[index]) {
-                          widget.onCancel(index + 9);
+                        if (!isPastTime && !availability[index]) {
+                          onCancel(index + 9);
                         }
                       },
                       child: Container(
@@ -463,7 +361,7 @@ class _StudyRoomItemState extends State<StudyRoomItem> {
                         height: 20,
                         color: isPastTime
                             ? Colors.grey
-                            : (widget.availability[index] ? Colors.blue : Colors.grey),
+                            : (availability[index] ? Colors.blue : Colors.grey),
                         margin: EdgeInsets.symmetric(horizontal: 2),
                       ),
                     ),
@@ -472,11 +370,102 @@ class _StudyRoomItemState extends State<StudyRoomItem> {
                 );
               }),
             ),
+            SizedBox(height: 10), // Add spacing between time slots and the button
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  _showTimeSelectionDialog(context, (int startTime, int duration) {
+                    // 선택된 시작 시간과 학습 시간으로 처리
+                    onSelect(startTime);
+                  });
+                },
+                child: Text('선택'),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+void _showTimeSelectionDialog(BuildContext context, Function(int, int) onTimeSelected) async {
+  int _selectedStartTime = 9; // 시작 시간
+  int _selectedDuration = 1; // 학습 시간
+
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('시간 선택'),
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Text('시작시간:'),
+                    SizedBox(width: 10),
+                    DropdownButton<int>(
+                      value: _selectedStartTime,
+                      items: List.generate(10, (index) {
+                        return DropdownMenuItem<int>(
+                          value: index + 9,
+                          child: Text('${index + 9}시'), // 9시부터 18시까지의 시간 옵션
+                        );
+                      }).toList(),
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          _selectedStartTime = newValue!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text('학습시간:'),
+                    SizedBox(width: 10),
+                    DropdownButton<int>(
+                      value: _selectedDuration,
+                      items: List.generate(3, (index) {
+                        return DropdownMenuItem<int>(
+                          value: index + 1,
+                          child: Text('${index + 1}시간'), // 1시간, 2시간, 3시간 옵션
+                        );
+                      }).toList(),
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          _selectedDuration = newValue!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // 취소 버튼 클릭 시 다이얼로그 닫기
+            },
+            child: Text('취소'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              onTimeSelected(_selectedStartTime, _selectedDuration);
+              Navigator.of(context).pop();
+            },
+            child: Text('확인'),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 extension DateTimeExtensions on DateTime {
