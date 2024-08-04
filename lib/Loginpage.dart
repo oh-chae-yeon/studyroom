@@ -4,7 +4,6 @@ import 'package:project_studyroom/Homepage.dart';
 import 'package:project_studyroom/providers/login_provider.dart';
 import 'package:project_studyroom/signup.dart';
 import 'package:provider/provider.dart';
-import '../providers/login_provider.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
@@ -44,6 +43,8 @@ class _LoginpageState extends State<Loginpage> {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+      } else if (e.code == 'network-request-failed') {
+        print('Network error occurred');
       }
     }
   }
@@ -54,7 +55,7 @@ class _LoginpageState extends State<Loginpage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: Container(),
-        backgroundColor: Color(0xFF22CC88), //배경 red
+        backgroundColor: Color(0xFF22CC88),
         centerTitle: true, //가운데 정렬
         title: const Text(
           //제목

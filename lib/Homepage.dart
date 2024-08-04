@@ -3,23 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:project_studyroom/detailreservation.dart';
 import 'package:project_studyroom/profile.dart';
 import 'reservation.dart';
+import 'package:provider/provider.dart';
+import 'package:project_studyroom/providers/reserv_provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage(User? user, {super.key});
+  final User? user;
+  const HomePage(this.user, {super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     Detailreservation(),
-    ReservationScreen(), // 예약 페이지로 이동
+    ReservationScreen(),
     Profile(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ReservationProvider>(context, listen: false).initializeReservationData();
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {

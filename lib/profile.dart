@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:project_studyroom/Loginpage.dart';
 import 'package:provider/provider.dart';
+import 'package:project_studyroom/Loginpage.dart';
 import '../providers/login_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +14,7 @@ class Profile extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: Container(),
-        backgroundColor: const Color.fromARGB(255, 154, 249, 159), //배경 red
+        backgroundColor: Color(0xFF22CC88), // AppBar 색상 설정
         centerTitle: true,
         title: const Text(
           '내 정보',
@@ -43,8 +42,8 @@ class MemberInfoScreen extends StatelessWidget {
     if (userDoc.exists) {
       final data = userDoc.data()!;
       final reservationsCount = await FirebaseFirestore.instance
-          .collection('reservations')
-          .where('student number', isEqualTo: user?.uid)
+          .collection('user_reservations')
+          .where('user.uid', isEqualTo: user?.uid)
           .get()
           .then((snapshot) => snapshot.size);
       data['reservationsCount'] = reservationsCount;
@@ -82,7 +81,8 @@ class MemberInfoScreen extends StatelessWidget {
                   padding: EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: Color.fromARGB(255, 154, 249, 159), width: 2.0),
+                        color: Color(0xFF22CC88), // AppBar 색상 설정
+                        width: 2.0),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Column(

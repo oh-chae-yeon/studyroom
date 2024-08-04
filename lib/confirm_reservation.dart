@@ -8,7 +8,7 @@ class Confirmreservation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 0, 0), //배경 red
+        backgroundColor: const Color.fromARGB(255, 154, 249, 159), //배경 red
         centerTitle: true, //가운데 정렬
         title: const Text(
           //제목

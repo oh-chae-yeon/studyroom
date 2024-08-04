@@ -16,7 +16,7 @@ class Studyroomstructure extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const ReservationScreen(),
+                  builder: (_) => ReservationScreen(),
                 ),
               );
             },
