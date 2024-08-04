@@ -10,6 +10,7 @@ class Studyroomstructure extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('스터디룸 구조'),
+        backgroundColor: Color(0xFF22CC88),
         actions: [
           IconButton(
             onPressed: () {

@@ -17,8 +17,8 @@ class Profile extends StatelessWidget {
         backgroundColor: Color(0xFF22CC88), // AppBar 색상 설정
         centerTitle: true,
         title: const Text(
-          '내 정보'
-        ),
+          '내 정보',
+        style:TextStyle(fontSize: 18),),
       ),
       body: const Center(
         child: MemberInfoScreen(),
@@ -89,7 +89,7 @@ class MemberInfoScreen extends StatelessWidget {
                       Text(
                         '회원 정보',
                         style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 16.0),
                       Text(

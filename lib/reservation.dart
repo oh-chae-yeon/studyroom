@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:project_studyroom/providers/login_provider.dart';
 import 'package:project_studyroom/providers/reserv_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:project_studyroom/studyroomstructure.dart';
 
 class ReservationScreen extends StatefulWidget {
   @override
@@ -138,9 +139,24 @@ class _ReservationScreenState extends State<ReservationScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: Container(),
-        title: Text('시설물예약'),
+        title: Text('시설물예약',
+        style:TextStyle(fontSize: 18),),
         centerTitle: true,
         backgroundColor: Color(0xFF22CC88),
+         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const Studyroomstructure(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.add, color: Colors.white),
+          ),
+        ],
+
      ),
       body: Column(
         children: [

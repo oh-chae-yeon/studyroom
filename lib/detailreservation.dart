@@ -18,7 +18,7 @@ class Detailreservation extends StatelessWidget {
         centerTitle: true,
         title: const Text(
           '나의 예약',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(fontSize: 18,color: Colors.black),
         ),
       ),
       body: user != null
